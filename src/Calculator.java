@@ -8,11 +8,18 @@ import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
 
 public class Calculator {
-    private JLabel numberField;
-    private double A=0,B=0;
-    private Character command=' ';
-    private boolean repeating=false;
+    public static final int COMMAND_COM=0;
+    public static final int COMMAND_ADD=1;
+    public static final int COMMAND_DIV=2;
+    public static final int COMMAND_MUL=3;
+    public static final int COMMAND_SUB=4;
+
+    private JLabel currentNumberField;
     private MyKeyAdapter myKeyAdapter;
+
+    private int command= COMMAND_COM;
+    private double result=0.0;
+    private boolean needClear=true;
 
     public Calculator(){
         ////////Создание программы///////////
@@ -39,9 +46,9 @@ public class Calculator {
         //////////////////////////////////////////////////////////
 
         /////////Создание экрана//////////
-        numberField=new JLabel("0.0");
-        numberField.setPreferredSize(new Dimension(program.getWidth()-15,30));
-        program.add(numberField);
+        currentNumberField =new JLabel("0");
+        currentNumberField.setPreferredSize(new Dimension(program.getWidth()-15,30));
+        program.add(currentNumberField);
         ////////////////////////////////
 
         /////////////Создание кнопок////////////////
@@ -52,84 +59,81 @@ public class Calculator {
     }
 
     public  void actionDigitInput(char key){
-        if(numberField.getText()=="0.0" || repeating) {
-            numberField.setText(Character.toString(key));
+        //Очищаем поле ввода если мы до этого получили результат
+        if(needClear) {
+            currentNumberField.setText("");
         }
-        else {
-            numberField.setText(numberField.getText() + key);
-        }
-        repeating=false;
-    }
-    public  void actionCommandInput(char command){
-        A = Double.parseDouble(numberField.getText());
-        numberField.setText("0.0");
-        this.command=command;
-        repeating=false;
+        currentNumberField.setText(currentNumberField.getText() + key);
+        needClear=false;
     }
     public  void actionDotInput(){
         if(!isDouble()){
-            numberField.setText(numberField.getText()+'.');
+            currentNumberField.setText(currentNumberField.getText()+'.');
         }
     }
     public  void actionCEInput(){
-        numberField.setText("0.0");
-        A=0.0;
-        B=0.0;
-        command=null;
-        repeating=false;
+        currentNumberField.setText("0");
+        result=0;
+        command= COMMAND_COM;
     }
     public  void actionCInput(){
-        numberField.setText("0.0");
+        currentNumberField.setText("0");
+        result=0;
     }
     public  void actionBackSpaceInput(){
-        if(numberField.getText().length()==1){
-            numberField.setText("0.0");
+        if(currentNumberField.getText().length()==1){
+            currentNumberField.setText("0");
         }
         else {
             String temp = "";
-            for (int i = 0; i < numberField.getText().length() - 1; i++)
-                temp = temp + numberField.getText().charAt(i);
-            numberField.setText(temp);
+            for (int i = 0; i < currentNumberField.getText().length() - 1; i++)
+                temp = temp + currentNumberField.getText().charAt(i);
+            currentNumberField.setText(temp);
         }
     }
     public  void actionSetSign(){
-        if(numberField.getText().charAt(0)=='-')
+        if(currentNumberField.getText().charAt(0)=='-')
         {
             String temp = "";
-            for (int i = 1; i < numberField.getText().length(); i++)
-                temp = temp + numberField.getText().charAt(i);
-            numberField.setText(temp);
+            for (int i = 1; i < currentNumberField.getText().length(); i++)
+                temp = temp + currentNumberField.getText().charAt(i);
+            currentNumberField.setText(temp);
         }
         else
         {
             String temp = "-";
-            for (int i = 0; i < numberField.getText().length(); i++)
-                temp = temp + numberField.getText().charAt(i);
-            numberField.setText(temp);
+            for (int i = 0; i < currentNumberField.getText().length(); i++)
+                temp = temp + currentNumberField.getText().charAt(i);
+            currentNumberField.setText(temp);
         }
     }
-    public  void actionCompute(){
-        if(command!=' ') {
-            if(!repeating)
-                B = Double.parseDouble(numberField.getText());
-            double result = 0;
-            if (command == '+') {
-                result = A + B;
-            } else if (command == '-') {
-                result = A - B;
-            } else if (command == '*') {
-                result = A * B;
-            } else if (command == '/') {
-                result = A / B;
-            }
-            numberField.setText(String.valueOf(result));
-            repeating=true;
-            A=result;
+    public  void actionCompute(int newCommand) {
+        double current = Double.parseDouble(currentNumberField.getText());
+        if (command == COMMAND_ADD) {
+            result += current;
+            System.out.print("+");
+        } else if (command == COMMAND_SUB) {
+            result -= current;
+            System.out.print("-");
+        } else if (command == COMMAND_MUL) {
+            System.out.print("*");
+            result *= current;
+        } else if (command == COMMAND_DIV) {
+            System.out.print("/");
+            result /= current;
+        } else if (command == COMMAND_COM) {
+            System.out.print("=");
         }
+        System.out.print(current);
+
+        currentNumberField.setText(String.valueOf(result));
+        if(newCommand!=COMMAND_COM)
+            command=newCommand;
+        needClear=true;
     }
     private  boolean isDouble(){
-        for(int i = 0; i< numberField.getText().length(); i++) {
-            if (numberField.getText().charAt(i) == '.') {
+        for(int i = 0; i< currentNumberField.getText().length(); i++) {
+            if (currentNumberField.getText().charAt(i) == '.') {
                 return true;
             }
         }

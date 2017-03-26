@@ -14,7 +14,23 @@ public class MyKeyAdapter extends KeyAdapter {
             calculator.actionDigitInput(e.getKeyChar());
         }
         else if(e.getKeyChar()=='+'||e.getKeyChar()=='-'||e.getKeyChar()=='/'||e.getKeyChar()=='*'){
-            calculator.actionCommandInput(e.getKeyChar());
+            char commandChar=e.getKeyChar();
+            int commandCode=Calculator.COMMAND_COM;
+            switch (commandChar){
+                case '+':
+                    commandCode=Calculator.COMMAND_ADD;
+                    break;
+                case '-':
+                    commandCode=Calculator.COMMAND_SUB;
+                    break;
+                case '*':
+                    commandCode=Calculator.COMMAND_MUL;
+                    break;
+                case '/':
+                    commandCode=Calculator.COMMAND_MUL;
+                    break;
+            }
+            calculator.actionCompute(commandCode);
         }
         else if(e.getKeyChar()=='.')
         {
@@ -28,7 +44,7 @@ public class MyKeyAdapter extends KeyAdapter {
             calculator.actionBackSpaceInput();
         }
         else if(e.getKeyCode()==KeyEvent.VK_ENTER){
-            calculator.actionCompute();
+            calculator.actionCompute(Calculator.COMMAND_COM);
         }
     }
 }
