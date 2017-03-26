@@ -19,6 +19,8 @@ public class Calculator {
 
     private int command= COMMAND_COM;
     private double result=0.0;
+    private double last=0.0;
+    private int last_command=COMMAND_COM;
     private boolean needClear=true;
 
     public Calculator(){
@@ -108,28 +110,63 @@ public class Calculator {
         }
     }
     public  void actionCompute(int newCommand) {
-        double current = Double.parseDouble(currentNumberField.getText());
         if (command == COMMAND_ADD) {
+            last_command = COMMAND_ADD;
+            double current = Double.parseDouble(currentNumberField.getText());
             result += current;
+            last = current;
             System.out.print("+");
         } else if (command == COMMAND_SUB) {
+            last_command = COMMAND_SUB;
+            double current = Double.parseDouble(currentNumberField.getText());
             result -= current;
+            last = current;
             System.out.print("-");
         } else if (command == COMMAND_MUL) {
+            last_command = COMMAND_MUL;
+            double current = Double.parseDouble(currentNumberField.getText());
             System.out.print("*");
             result *= current;
+            last = current;
         } else if (command == COMMAND_DIV) {
+            last_command = COMMAND_DIV;
+            double current = Double.parseDouble(currentNumberField.getText());
             System.out.print("/");
             result /= current;
+            last = current;
         } else if (command == COMMAND_COM) {
+            if (newCommand == COMMAND_COM) {
+                switch (last_command) {
+                    case COMMAND_ADD:
+                        last_command = COMMAND_ADD;
+                        result += last;
+                        break;
+                    case COMMAND_SUB:
+                        last_command = COMMAND_SUB;
+                        result -= last;
+                        break;
+                    case COMMAND_MUL:
+                        last_command = COMMAND_MUL;
+                        result *= last;
+                        break;
+                    case COMMAND_DIV:
+                        last_command = COMMAND_DIV;
+                        result /= last;
+                        break;
+                    case COMMAND_COM:
+                        double current = Double.parseDouble(currentNumberField.getText());
+                        result = current;
+                        break;
+                }
+            } else {
+                double current = Double.parseDouble(currentNumberField.getText());
+                result = current;
+            }
             System.out.print("=");
         }
-        System.out.print(current);
-
         currentNumberField.setText(String.valueOf(result));
-        if(newCommand!=COMMAND_COM)
-            command=newCommand;
-        needClear=true;
+        command = newCommand;
+        needClear = true;
     }
     private  boolean isDouble(){
         for(int i = 0; i< currentNumberField.getText().length(); i++) {

@@ -61,5 +61,5 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-.idea/
 out/
+.idea/

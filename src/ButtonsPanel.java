@@ -137,7 +137,7 @@ public class ButtonsPanel extends JPanel implements ActionListener{
                     commandCode=Calculator.COMMAND_MUL;
                     break;
                 case '/':
-                    commandCode=Calculator.COMMAND_MUL;
+                    commandCode=Calculator.COMMAND_DIV;
                     break;
             }
             calculator.actionCompute(commandCode);
