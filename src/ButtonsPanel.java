@@ -124,7 +124,23 @@ public class ButtonsPanel extends JPanel implements ActionListener{
             calculator.actionDigitInput(ae.getActionCommand().charAt(0));
         }
         else if(ae.getActionCommand()=="+"||ae.getActionCommand()=="-"||ae.getActionCommand()=="/"||ae.getActionCommand()=="*"){
-            calculator.actionCommandInput(ae.getActionCommand().charAt(0));
+            char commandChar=ae.getActionCommand().charAt(0);
+            int commandCode=Calculator.COMMAND_COM;
+            switch (commandChar){
+                case '+':
+                    commandCode=Calculator.COMMAND_ADD;
+                    break;
+                case '-':
+                    commandCode=Calculator.COMMAND_SUB;
+                    break;
+                case '*':
+                    commandCode=Calculator.COMMAND_MUL;
+                    break;
+                case '/':
+                    commandCode=Calculator.COMMAND_DIV;
+                    break;
+            }
+            calculator.actionCompute(commandCode);
         }
         else if(ae.getActionCommand()=="CE")
         {
@@ -143,7 +159,7 @@ public class ButtonsPanel extends JPanel implements ActionListener{
             calculator.actionSetSign();
         }
         else if(ae.getActionCommand()=="="){
-            calculator.actionCompute();
+            calculator.actionCompute(Calculator.COMMAND_COM);
         }
         else if(ae.getActionCommand()==".")
         {
