@@ -4,10 +4,7 @@
  */
 import  javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.*;
 
 public class Calculator {
     public static final int COMMAND_COM=0;
@@ -31,7 +28,7 @@ public class Calculator {
         program.setSize(300,400);
         program.setResizable(false);
         program.setVisible(true);
-        program.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        program.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         program.setLayout(new FlowLayout());
         program.setFocusable(true);
         program.addFocusListener(new FocusAdapter() {
@@ -348,6 +345,61 @@ public class Calculator {
             else if(ae.getActionCommand()==".")
             {
                 calculator.actionDotInput();
+            }
+        }
+    }
+
+    public class MyFocusListener extends FocusAdapter {
+        private Button button;
+        public MyFocusListener(Button button){
+            this.button=button;
+        }
+        public void focusGained(FocusEvent fe){
+            button.setFocusable(false);
+        }
+    }
+
+    class MyKeyAdapter extends KeyAdapter {
+        private Calculator calculator;
+        public MyKeyAdapter(Calculator calculator){
+            this.calculator=calculator;
+        }
+        public void keyPressed(KeyEvent e) {
+            if(Character.isDigit(e.getKeyChar())) {
+                calculator.actionDigitInput(e.getKeyChar());
+            }
+            else if(e.getKeyChar()=='+'||e.getKeyChar()=='-'||e.getKeyChar()=='/'||e.getKeyChar()=='*'){
+                char commandChar=e.getKeyChar();
+                int commandCode=Calculator.COMMAND_COM;
+                switch (commandChar){
+                    case '+':
+                        commandCode=Calculator.COMMAND_ADD;
+                        break;
+                    case '-':
+                        commandCode=Calculator.COMMAND_SUB;
+                        break;
+                    case '*':
+                        commandCode=Calculator.COMMAND_MUL;
+                        break;
+                    case '/':
+                        commandCode=Calculator.COMMAND_DIV;
+                        break;
+                }
+                calculator.actionCompute(commandCode);
+            }
+            else if(e.getKeyChar()=='.')
+            {
+                calculator.actionDotInput();
+            }
+            else if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
+            {
+                calculator.actionCEInput();
+            }
+            else if(e.getKeyCode()==KeyEvent.VK_BACK_SPACE) {
+                calculator.actionBackSpaceInput();
+            }
+            else if(e.getKeyCode()==KeyEvent.VK_ENTER){
+                calculator.actionCompute(Calculator.COMMAND_COM);
             }
         }
     }
