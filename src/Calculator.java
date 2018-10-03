@@ -5,82 +5,204 @@
 import  javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Objects;
 
-public class Calculator {
-    public static final int COMMAND_COM=0;
-    public static final int COMMAND_ADD=1;
-    public static final int COMMAND_DIV=2;
-    public static final int COMMAND_MUL=3;
-    public static final int COMMAND_SUB=4;
+public class Calculator implements ActionListener {
 
     private JLabel currentNumberField;
 
-    private int command= COMMAND_COM;
-    private double result=0.0;
-    private double last=0.0;
-    private int last_command=COMMAND_COM;
-    private boolean needClear=true;
+    private char command = ' ';
+    private double last = 0.0;
 
-    public Calculator(){
-        ////////Создание программы///////////
+    private Calculator() {
         JFrame program;
-        program=new JFrame("Calculator");
+        program = new JFrame("Calculator");
         program.setSize(300,400);
         program.setResizable(false);
         program.setVisible(true);
         program.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         program.setLayout(new FlowLayout());
         program.setFocusable(true);
-        program.addFocusListener(new FocusAdapter() {
+
+        program.addKeyListener(new KeyAdapter() {
             @Override
-            public void focusLost(FocusEvent e) {
-                super.focusLost(e);
-                program.setFocusable(true);
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                ActionEvent ae = new ActionEvent(e.getSource(),e.getID(), e.getKeyChar() + "");
+                Calculator.this.actionPerformed(ae);
             }
         });
-        /////////////////////////////////////
-
-        /////////////Создание считывателя нажиманий////////////////
-        MyKeyAdapter myKeyAdapter = new MyKeyAdapter(this);
-        program.addKeyListener(myKeyAdapter);
-        //////////////////////////////////////////////////////////
 
         /////////Создание экрана//////////
-        currentNumberField =new JLabel("0");
-        currentNumberField.setPreferredSize(new Dimension(program.getWidth()-15,30));
+        currentNumberField = new JLabel("0");
+        currentNumberField.setPreferredSize(new Dimension(program.getWidth() - 15,30));
         program.add(currentNumberField);
         ////////////////////////////////
 
         /////////////Создание кнопок////////////////
-        ButtonsPanel buttonsPanel=new ButtonsPanel(this);
-        buttonsPanel.setPreferredSize(new Dimension(program.getWidth()-10,program.getHeight()-80));
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setPreferredSize(new Dimension(program.getWidth() - 10,program.getHeight() - 80));
+
+        buttonsPanel.setLayout(new GridLayout(5,4,5,5));
+        buttonsPanel.setVisible(true);
+
+        Button buttonCE=new Button("CE");
+        buttonCE.addActionListener(this);
+        buttonCE.setFocusable(false);
+        buttonsPanel.add(buttonCE);
+
+        Button buttonC=new Button("C");
+        buttonC.addActionListener(this);
+        buttonC.setFocusable(false);
+        buttonsPanel.add(buttonC);
+
+        Button buttonDel=new Button("<");
+        buttonDel.addActionListener(this);
+        buttonDel.setFocusable(false);
+        buttonsPanel.add(buttonDel);
+
+        Button buttonDiv=new Button("/");
+        buttonDiv.addActionListener(this);
+        buttonDiv.setFocusable(false);
+        buttonsPanel.add(buttonDiv);
+
+        Button button7=new Button("7");
+        button7.addActionListener(this);
+        button7.setFocusable(false);
+        buttonsPanel.add(button7);
+
+        Button button8=new Button("8");
+        button8.addActionListener(this);
+        button8.setFocusable(false);
+        buttonsPanel.add(button8);
+
+        Button button9=new Button("9");
+        button9.addActionListener(this);
+        button9.setFocusable(false);
+        buttonsPanel.add(button9);
+
+        Button buttonMul=new Button("*");
+        buttonMul.addActionListener(this);
+        buttonMul.setFocusable(false);
+        buttonsPanel.add(buttonMul);
+
+        Button button4=new Button("4");
+        button4.addActionListener(this);
+        button4.setFocusable(false);
+        buttonsPanel.add(button4);
+
+        Button button5=new Button("5");
+        button5.addActionListener(this);
+        button5.setFocusable(false);
+        buttonsPanel.add(button5);
+
+        Button button6=new Button("6");
+        button6.addActionListener(this);
+        button6.setFocusable(false);
+        buttonsPanel.add(button6);
+
+        Button buttonSub=new Button("-");
+        buttonSub.addActionListener(this);
+        buttonSub.setFocusable(false);
+        buttonsPanel.add(buttonSub);
+
+        Button button1=new Button("1");
+        button1.addActionListener(this);
+        button1.setFocusable(false);
+        buttonsPanel.add(button1);
+
+        Button button2=new Button("2");
+        button2.addActionListener(this);
+        button2.setFocusable(false);
+        buttonsPanel.add(button2);
+
+        Button button3=new Button("3");
+        button3.addActionListener(this);
+        button3.setFocusable(false);
+        buttonsPanel.add(button3);
+
+        Button buttonAdd=new Button("+");
+        buttonAdd.addActionListener(this);
+        buttonAdd.setFocusable(false);
+        buttonsPanel.add(buttonAdd);
+
+        Button buttonPlusMinus=new Button("+-");
+        buttonPlusMinus.addActionListener(this);
+        buttonPlusMinus.setFocusable(false);
+        buttonsPanel.add(buttonPlusMinus);
+
+        Button button0=new Button("0");
+        button0.addActionListener(this);
+        button0.setFocusable(false);
+        buttonsPanel.add(button0);
+
+        Button buttonDot=new Button(".");
+        buttonDot.addActionListener(this);
+        buttonDot.setFocusable(false);
+        buttonsPanel.add(buttonDot);
+
+        Button buttonResult=new Button("=");
+        buttonResult.addActionListener(this);
+        buttonResult.setFocusable(false);
+        buttonsPanel.add(buttonResult);
+
         program.add(buttonsPanel);
-        ///////////////////////////////////////////
     }
 
-    public  void actionDigitInput(char key){
-        //Очищаем поле ввода если мы до этого получили результат
-        if(needClear) {
-            currentNumberField.setText("");
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        char c = e.getActionCommand().charAt(0);
+        System.out.println(c + "");
+        double current = Double.parseDouble(currentNumberField.getText());
+        if(Character.isDigit(c)) {
+            if (current == 0) {
+                currentNumberField.setText("");
+            }
+            currentNumberField.setText(currentNumberField.getText() + c);
         }
-        currentNumberField.setText(currentNumberField.getText() + key);
-        needClear=false;
+        else if (c == '+' || c == '-' || c =='/' || c == '*') {
+            compute();
+            this.command = e.getActionCommand().charAt(0);
+        }
+        else if(e.getActionCommand().equals("=") || e.getActionCommand().equals("\n")) {
+            compute();
+        }
+        else if(e.getActionCommand().equals("CE")) {
+            actionCEInput();
+        }
+        else if(e.getActionCommand().equals("C")) {
+            actionCInput();
+        }
+        else if(e.getActionCommand().equals("<")) {
+            actionBackSpaceInput();
+        }
+        else if(e.getActionCommand().equals("+-")) {
+            actionSetSign();
+        }
+        /*
+        else if(e.getActionCommand().equals(".")) {
+            actionDotInput();
+        }
+        */
     }
-    public  void actionDotInput(){
+
+    private  void actionDotInput(){
         if(!isDouble()){
             currentNumberField.setText(currentNumberField.getText()+'.');
         }
     }
-    public  void actionCEInput(){
+
+    private  void actionCEInput(){
         currentNumberField.setText("0");
-        result=0;
-        command= COMMAND_COM;
+        last =0;
     }
-    public  void actionCInput(){
+
+    private  void actionCInput(){
         currentNumberField.setText("0");
-        result=0;
+        last =0;
     }
-    public  void actionBackSpaceInput(){
+
+    private  void actionBackSpaceInput(){
         if(currentNumberField.getText().length()==1){
             currentNumberField.setText("0");
         }
@@ -91,7 +213,8 @@ public class Calculator {
             currentNumberField.setText(temp);
         }
     }
-    public  void actionSetSign(){
+
+    private  void actionSetSign(){
         if(currentNumberField.getText().charAt(0)=='-')
         {
             String temp = "";
@@ -107,70 +230,87 @@ public class Calculator {
             currentNumberField.setText(temp);
         }
     }
-    public  void actionCompute(int newCommand) {
+
+    private  void compute() {
+        double current = Double.parseDouble(currentNumberField.getText());
+        switch (command) {
+            case '+':
+                last += current;
+                break;
+            case '-':
+                last -= current;
+                break;
+            case '*':
+                last *= current;
+                break;
+            case '/':
+                last /= current;
+            default:
+                last = current;
+                break;
+        }
+        currentNumberField.setText(last + "");
+        /*
         if(!needClear || newCommand==COMMAND_COM) {
             if (command == COMMAND_ADD) {
                 last_command = COMMAND_ADD;
                 double current = Double.parseDouble(currentNumberField.getText());
-                result += current;
-                last = current;
-                System.out.print("+");
+                last += current;
+                this.current = current;
             } else if (command == COMMAND_SUB) {
                 last_command = COMMAND_SUB;
                 double current = Double.parseDouble(currentNumberField.getText());
-                result -= current;
-                last = current;
-                System.out.print("-");
+                last -= current;
+                this.current = current;
             } else if (command == COMMAND_MUL) {
                 last_command = COMMAND_MUL;
                 double current = Double.parseDouble(currentNumberField.getText());
-                System.out.print("*");
-                result *= current;
-                last = current;
+                last *= current;
+                this.current = current;
             } else if (command == COMMAND_DIV) {
                 last_command = COMMAND_DIV;
                 double current = Double.parseDouble(currentNumberField.getText());
-                System.out.print("/");
-                result /= current;
-                last = current;
+                last /= current;
+                this.current = current;
             } else if (command == COMMAND_COM) {
                 if (newCommand == COMMAND_COM) {
                     switch (last_command) {
                         case COMMAND_ADD:
                             last_command = COMMAND_ADD;
-                            result += last;
+                            last += current;
                             break;
                         case COMMAND_SUB:
                             last_command = COMMAND_SUB;
-                            result -= last;
+                            last -= current;
                             break;
                         case COMMAND_MUL:
                             last_command = COMMAND_MUL;
-                            result *= last;
+                            last *= current;
                             break;
                         case COMMAND_DIV:
                             last_command = COMMAND_DIV;
-                            result /= last;
+                            last /= current;
                             break;
                         case COMMAND_COM:
                             double current = Double.parseDouble(currentNumberField.getText());
-                            result = current;
+                            last = current;
                             break;
                     }
                 } else {
                     double current = Double.parseDouble(currentNumberField.getText());
-                    result = current;
+                    last = current;
                 }
-                System.out.print("=");
             }
-            currentNumberField.setText(String.valueOf(result));
+            currentNumberField.setText(String.valueOf(last));
             command = newCommand;
             needClear = true;
         }else{
             command=newCommand;
         }
+        */
     }
-    private  boolean isDouble(){
+
+    private boolean isDouble(){
         for(int i = 0; i< currentNumberField.getText().length(); i++) {
             if (currentNumberField.getText().charAt(i) == '.') {
                 return true;
@@ -178,6 +318,7 @@ public class Calculator {
         }
         return false;
     }
+
     public static void main(String args[]){
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -185,222 +326,5 @@ public class Calculator {
                 new Calculator();
             }
         });
-    }
-
-    class ButtonsPanel extends JPanel implements ActionListener {
-        private Calculator calculator;
-        public ButtonsPanel(Calculator calculator){
-            this.calculator=calculator;
-            this.setLayout(new GridLayout(5,4,5,5));
-            this.setVisible(true);
-
-            Button buttonCE=new Button("CE");
-            buttonCE.addActionListener(this);
-            buttonCE.addFocusListener(new MyFocusListener(buttonCE));
-            this.add(buttonCE);
-
-            Button buttonC=new Button("C");
-            buttonC.addActionListener(this);
-            buttonC.addFocusListener(new MyFocusListener(buttonC));
-
-            this.add(buttonC);
-
-            Button buttonDel=new Button("<");
-            buttonDel.addActionListener(this);
-            buttonDel.addFocusListener(new MyFocusListener(buttonDel));
-
-            this.add(buttonDel);
-
-            Button buttonDiv=new Button("/");
-            buttonDiv.addActionListener(this);
-            buttonDiv.addFocusListener(new MyFocusListener(buttonDiv));
-
-            this.add(buttonDiv);
-
-            Button button7=new Button("7");
-            button7.addActionListener(this);
-            button7.addFocusListener(new MyFocusListener(button7));
-
-            this.add(button7);
-
-            Button button8=new Button("8");
-            button8.addActionListener(this);
-            button8.addFocusListener(new MyFocusListener(button8));
-
-            this.add(button8);
-
-            Button button9=new Button("9");
-            button9.addActionListener(this);
-            button9.addFocusListener(new MyFocusListener(button9));
-            this.add(button9);
-
-            Button buttonMul=new Button("*");
-            buttonMul.addActionListener(this);
-            buttonMul.addFocusListener(new MyFocusListener(buttonMul));
-
-            this.add(buttonMul);
-
-            Button button4=new Button("4");
-            button4.addActionListener(this);
-            button4.addFocusListener(new MyFocusListener(button4));
-            this.add(button4);
-
-            Button button5=new Button("5");
-            button5.addActionListener(this);
-            button5.addFocusListener(new MyFocusListener(button5));
-            this.add(button5);
-
-            Button button6=new Button("6");
-            button6.addActionListener(this);
-            button6.addFocusListener(new MyFocusListener(button6));
-            this.add(button6);
-
-            Button buttonSub=new Button("-");
-            buttonSub.addActionListener(this);
-            buttonSub.addFocusListener(new MyFocusListener(buttonSub));
-            this.add(buttonSub);
-
-            Button button1=new Button("1");
-            button1.addActionListener(this);
-            button1.addFocusListener(new MyFocusListener(button1));
-            this.add(button1);
-
-            Button button2=new Button("2");
-            button2.addActionListener(this);
-            button2.addFocusListener(new MyFocusListener(button2));
-            this.add(button2);
-
-            Button button3=new Button("3");
-            button3.addActionListener(this);
-            button3.addFocusListener(new MyFocusListener(button3));
-            this.add(button3);
-
-            Button buttonAdd=new Button("+");
-            buttonAdd.addActionListener(this);
-            buttonAdd.addFocusListener(new MyFocusListener(buttonAdd));
-            this.add(buttonAdd);
-
-            Button buttonPlusMinus=new Button("+-");
-            buttonPlusMinus.addActionListener(this);
-            buttonPlusMinus.addFocusListener(new MyFocusListener(buttonPlusMinus));
-            this.add(buttonPlusMinus);
-
-            Button button0=new Button("0");
-            button0.addActionListener(this);
-            button0.addFocusListener(new MyFocusListener(button0));
-            this.add(button0);
-
-            Button buttonDot=new Button(".");
-            buttonDot.addActionListener(this);
-            buttonDot.addFocusListener(new MyFocusListener(buttonDot));
-            this.add(buttonDot);
-
-            Button buttonResult=new Button("=");
-            buttonResult.addActionListener(this);
-            buttonResult.addFocusListener(new MyFocusListener(buttonResult));
-            this.add(buttonResult);
-        }
-        public void actionPerformed(ActionEvent ae){
-            if(Character.isDigit(ae.getActionCommand().charAt(0))) {
-                calculator.actionDigitInput(ae.getActionCommand().charAt(0));
-            }
-            else if(ae.getActionCommand()=="+"||ae.getActionCommand()=="-"||ae.getActionCommand()=="/"||ae.getActionCommand()=="*"){
-                char commandChar=ae.getActionCommand().charAt(0);
-                int commandCode=Calculator.COMMAND_COM;
-                switch (commandChar){
-                    case '+':
-                        commandCode=Calculator.COMMAND_ADD;
-                        break;
-                    case '-':
-                        commandCode=Calculator.COMMAND_SUB;
-                        break;
-                    case '*':
-                        commandCode=Calculator.COMMAND_MUL;
-                        break;
-                    case '/':
-                        commandCode=Calculator.COMMAND_DIV;
-                        break;
-                }
-                calculator.actionCompute(commandCode);
-            }
-            else if(ae.getActionCommand()=="CE")
-            {
-                calculator.actionCEInput();
-            }
-            else if(ae.getActionCommand()=="C")
-            {
-                calculator.actionCInput();
-            }
-            else if(ae.getActionCommand()=="<")
-            {
-                calculator.actionBackSpaceInput();
-            }
-            else if(ae.getActionCommand()=="+-")
-            {
-                calculator.actionSetSign();
-            }
-            else if(ae.getActionCommand()=="="){
-                calculator.actionCompute(Calculator.COMMAND_COM);
-            }
-            else if(ae.getActionCommand()==".")
-            {
-                calculator.actionDotInput();
-            }
-        }
-    }
-
-    public class MyFocusListener extends FocusAdapter {
-        private Button button;
-        public MyFocusListener(Button button){
-            this.button=button;
-        }
-        public void focusGained(FocusEvent fe){
-            button.setFocusable(false);
-        }
-    }
-
-    class MyKeyAdapter extends KeyAdapter {
-        private Calculator calculator;
-        public MyKeyAdapter(Calculator calculator){
-            this.calculator=calculator;
-        }
-        public void keyPressed(KeyEvent e) {
-            if(Character.isDigit(e.getKeyChar())) {
-                calculator.actionDigitInput(e.getKeyChar());
-            }
-            else if(e.getKeyChar()=='+'||e.getKeyChar()=='-'||e.getKeyChar()=='/'||e.getKeyChar()=='*'){
-                char commandChar=e.getKeyChar();
-                int commandCode=Calculator.COMMAND_COM;
-                switch (commandChar){
-                    case '+':
-                        commandCode=Calculator.COMMAND_ADD;
-                        break;
-                    case '-':
-                        commandCode=Calculator.COMMAND_SUB;
-                        break;
-                    case '*':
-                        commandCode=Calculator.COMMAND_MUL;
-                        break;
-                    case '/':
-                        commandCode=Calculator.COMMAND_DIV;
-                        break;
-                }
-                calculator.actionCompute(commandCode);
-            }
-            else if(e.getKeyChar()=='.')
-            {
-                calculator.actionDotInput();
-            }
-            else if(e.getKeyCode()==KeyEvent.VK_ESCAPE)
-            {
-                calculator.actionCEInput();
-            }
-            else if(e.getKeyCode()==KeyEvent.VK_BACK_SPACE) {
-                calculator.actionBackSpaceInput();
-            }
-            else if(e.getKeyCode()==KeyEvent.VK_ENTER){
-                calculator.actionCompute(Calculator.COMMAND_COM);
-            }
-        }
     }
 }

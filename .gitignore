@@ -2,3 +2,4 @@
 _gitattributes
 _gitignore
 out/
+.DS_STORE
