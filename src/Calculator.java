@@ -10,9 +10,6 @@ public class Calculator implements ActionListener {
 
     private JLabel screenLabel;
 
-    private String command = "";
-    private double last = 0.0;
-
     private Calculator() {
         JFrame program;
         program = new JFrame("Calculator");
@@ -133,7 +130,7 @@ public class Calculator implements ActionListener {
         button0.setFocusable(false);
         buttonsPanel.add(button0);
 
-        Button buttonDot = new Button(".");
+        Button buttonDot = new Button("<");
         buttonDot.addActionListener(this);
         buttonDot.setFocusable(false);
         buttonsPanel.add(buttonDot);
@@ -147,14 +144,11 @@ public class Calculator implements ActionListener {
         program.setVisible(true);
     }
 
-    private double getCurrent() {
-        double current = 0;
-        try {
-            current = Double.parseDouble(screenLabel.getText());
-        } catch (Exception ex) {
-            System.out.println(ex.getMessage());
+    private Character getLastChar() {
+        if (screenLabel.getText().isEmpty()) {
+            return null;
         }
-        return current;
+        return screenLabel.getText().charAt(screenLabel.getText().length() - 1);
     }
 
     @Override
@@ -162,62 +156,52 @@ public class Calculator implements ActionListener {
         String actionCommand = e.getActionCommand();
         System.out.println(actionCommand);
 
-        if (actionCommand.charAt(0) == 8) { // is backspace
+        if (actionCommand.charAt(0) == 8 || actionCommand.equals("<")) { // is backspace
             screenLabel.setText(screenLabel.getText().substring(0, screenLabel.getText().length() - 1));
         }
         else if(Character.isDigit(actionCommand.charAt(0))) {
-            if (getCurrent() == 0) {
+            if (screenLabel.getText().equals("0") || screenLabel.getText().equals("0.0") ) {
                 screenLabel.setText("");
             }
             screenLabel.setText(screenLabel.getText() + actionCommand);
         }
         else if (actionCommand.equals("+") || actionCommand.equals("-") || actionCommand.equals("/") || actionCommand.equals("*")) {
-            command = e.getActionCommand();
-            last = getCurrent();
-            screenLabel.setText("");
+            if (getLastChar() != null && (Character.isDigit(getLastChar()) || getLastChar() == ')')) {
+                screenLabel.setText(screenLabel.getText() + actionCommand);
+            }
+            else if (actionCommand.equals("-") && getLastChar() != null && getLastChar() == '(') {
+                screenLabel.setText(screenLabel.getText() + actionCommand);
+            }
+        }
+        else if (actionCommand.equals("(")) {
+            if (getLastChar() == null || getLastChar() == '+' || getLastChar() == '-' || getLastChar() == '/' || getLastChar() == '*') {
+                screenLabel.setText(screenLabel.getText() + actionCommand);
+            }
+        }
+        else if (actionCommand.equals(")")) {
+            if (getLastChar() != null && Character.isDigit(getLastChar())) {
+                screenLabel.setText(screenLabel.getText() + actionCommand);
+            }
         }
         else if(e.getActionCommand().equals("=") || e.getActionCommand().equals("\n")) {
-            switch (command) {
-                case "+":
-                    last += getCurrent();
-                    break;
-                case "-":
-                    last -= getCurrent();
-                    break;
-                case "*":
-                    last *= getCurrent();
-                    break;
-                case "/":
-                    last /= getCurrent();
-                    break;
-                default:
-                    last = getCurrent();
-                    break;
-            }
-            command = "";
-            screenLabel.setText(last + "");
-        }
-        else if(actionCommand.equals("C")) {
-            screenLabel.setText("0");
-            last = 0;
-            command = "";
-        }
-        else if(actionCommand.equals("+-")) {
-            if (getCurrent() > 0) {
-                screenLabel.setText("-" + getCurrent());
-            }
-            else if (getCurrent() < 0) {
-                screenLabel.setText("" + (-getCurrent()));
-            }
+            screenLabel.setText("" + RPN.solve(screenLabel.getText()));
             if (screenLabel.getText().endsWith(".0")) {
                 screenLabel.setText(screenLabel.getText().substring(0, screenLabel.getText().length() - 2));
             }
+        }
+        else if(actionCommand.equals("C")) {
+            screenLabel.setText("0");
         }
         else if(actionCommand.equals(".")) {
             if(!screenLabel.getText().contains(".")){
                 screenLabel.setText(screenLabel.getText() + '.');
             }
         }
+    }
+
+    private double e(String s) {
+        System.out.println(s);
+        return 0;
     }
 
     public static void main(String args[]){
