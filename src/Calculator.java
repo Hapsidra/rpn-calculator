@@ -151,6 +151,16 @@ public class Calculator implements ActionListener {
         return screenLabel.getText().charAt(screenLabel.getText().length() - 1);
     }
 
+    private double getLastNumber() {
+        StringBuilder s = new StringBuilder();
+        String screenText = screenLabel.getText();
+        int i = screenText.length() - 1;
+        while(i>= 0 && (Character.isDigit(screenText.charAt(i)) || screenText.charAt(i) == '.' || screenText.charAt(i) == '-')) {
+            s.insert(0, screenText.charAt(i--));
+        }
+        return Double.parseDouble(s.toString());
+    }
+
     @Override
     public void actionPerformed(ActionEvent e) {
         String actionCommand = e.getActionCommand();
@@ -189,6 +199,17 @@ public class Calculator implements ActionListener {
                 screenLabel.setText(screenLabel.getText().substring(0, screenLabel.getText().length() - 2));
             }
         }
+        else if(actionCommand.equals("+-")) {
+            if (getLastNumber() > 0) {
+                screenLabel.setText("-" + getLastNumber());
+            }
+            else if (getLastNumber() < 0) {
+                screenLabel.setText("" + (-getLastNumber()));
+            }
+            if (screenLabel.getText().endsWith(".0")) {
+                screenLabel.setText(screenLabel.getText().substring(0, screenLabel.getText().length() - 2));
+            }
+        }
         else if(actionCommand.equals("C")) {
             screenLabel.setText("0");
         }
@@ -197,11 +218,6 @@ public class Calculator implements ActionListener {
                 screenLabel.setText(screenLabel.getText() + '.');
             }
         }
-    }
-
-    private double e(String s) {
-        System.out.println(s);
-        return 0;
     }
 
     public static void main(String args[]){

@@ -21,7 +21,6 @@ public class RPN {
     //Алгоритм: https://ru.wikipedia.org/wiki/%D0%90%D0%BB%D0%B3%D0%BE%D1%80%D0%B8%D1%82%D0%BC_%D1%81%D0%BE%D1%80%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%BE%D1%87%D0%BD%D0%BE%D0%B9_%D1%81%D1%82%D0%B0%D0%BD%D1%86%D0%B8%D0%B8
     private static String convert(String s) {
         s = addSpaces(s);
-        System.out.println(s);
         String[] ss = s.split(" ");
         StringBuilder result = new StringBuilder();
         Stack<String> opsStack = new Stack<>();
@@ -64,17 +63,28 @@ public class RPN {
     private static String addSpaces(String s) {
         s = s.replaceAll(" ", "");
         StringBuilder t = new StringBuilder(s);
-        for (int i = t.length() - 1; i >= 0; i--) {
+        for (int i = t.length() - 2; i >= 0; i--) {
             if (!Character.isDigit(t.charAt(i)) || !Character.isDigit(t.charAt(i + 1))) {
                 t.insert(i + 1, ' ');
             }
         }
-        t.deleteCharAt(t.length() - 1);
+        if (t.charAt(t.length() - 1) == ' ')
+            t.deleteCharAt(t.length() - 1);
+        if (t.charAt(0) == '-') {
+            t.deleteCharAt(1);
+        }
         return t.toString();
     }
 
     private static boolean isNumber(String s) {
-        for (int i = 0; i < s.length(); i++) {
+        int i = 0;
+        if (s.equals("-")) {
+            return false;
+        }
+        if (s.startsWith("-")) {
+            i = 1;
+        }
+        for (;i < s.length(); i++) {
             if (!Character.isDigit(s.charAt(i))) {
                 return false;
             }
@@ -83,11 +93,12 @@ public class RPN {
     }
 
     //Передается обычное выражение, например:
-    //3 + 4 * 2 / (1 − 5)
+    //3+4* 2/(1 −5)
     //Функция вычисляет результат
     //Алгоритм: https://ru.wikipedia.org/wiki/%D0%9E%D0%B1%D1%80%D0%B0%D1%82%D0%BD%D0%B0%D1%8F_%D0%BF%D0%BE%D0%BB%D1%8C%D1%81%D0%BA%D0%B0%D1%8F_%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D1%8C
     public static double solve(String s) {
         Stack<Double> stack = new Stack<>();
+        s = s.replaceAll("\\((\\ )?-", "\\(0-");
         s = convert(s);
         String[] ss = s.split(" ");
         for (int i = 0; i < ss.length; i++) {
