@@ -67,14 +67,18 @@ public class Calculator implements ActionListener {
         return screenLabel.getText().charAt(screenLabel.getText().length() - 1);
     }
 
-    private double getLastNumber() {
+    private String getLastNumberString() {
         StringBuilder s = new StringBuilder();
         String screenText = screenLabel.getText();
         int i = screenText.length() - 1;
         while(i>= 0 && (Character.isDigit(screenText.charAt(i)) || screenText.charAt(i) == '.' || screenText.charAt(i) == '-')) {
             s.insert(0, screenText.charAt(i--));
         }
-        return Double.parseDouble(s.toString());
+        return s.toString();
+    }
+
+    private double getLastNumber() {
+        return Double.parseDouble(getLastNumberString());
     }
 
     @Override
@@ -133,7 +137,7 @@ public class Calculator implements ActionListener {
             screenLabel.setText("0");
         }
         else if(actionCommand.equals(".")) {
-            if(!screenLabel.getText().contains(".")){
+            if(!getLastNumberString().contains(".")){
                 screenLabel.setText(screenLabel.getText() + '.');
             }
         }

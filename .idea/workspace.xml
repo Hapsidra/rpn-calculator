@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1685dd19-d5d1-413d-880c-d0b332c143a1" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/src/RPN.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RPN.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Calculator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Calculator.java" afterDir="false" />
     </list>
     <ignored path="Calculator.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -33,12 +33,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="5512" />
+          <entry key="java" value="5624" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="5512" />
+          <entry key="JAVA" value="5624" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -63,11 +63,13 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/Calculator.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-894">
-              <caret line="40" column="36" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
+            <state relative-caret-position="317">
+              <caret line="139" column="38" selection-start-line="139" selection-start-column="38" selection-end-line="139" selection-end-column="38" />
               <folding>
                 <element signature="n#!!doc" expanded="true" />
                 <element signature="imports" expanded="true" />
+                <element signature="e#2661#2662#0" expanded="true" />
+                <element signature="e#2716#2717#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -76,7 +78,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/RPN.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="150">
+            <state relative-caret-position="924">
               <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -159,8 +161,8 @@
         <option value="$PROJECT_DIR$/src/ButtonsPanel.java" />
         <option value="$PROJECT_DIR$/src/MyFocusListener.java" />
         <option value="$PROJECT_DIR$/src/MyKeyAdapter.java" />
-        <option value="$PROJECT_DIR$/src/Calculator.java" />
         <option value="$PROJECT_DIR$/src/RPN.java" />
+        <option value="$PROJECT_DIR$/src/Calculator.java" />
       </list>
     </option>
   </component>
@@ -381,7 +383,7 @@
       <workItem from="1539737957091" duration="7108000" />
       <workItem from="1539761689597" duration="3566000" />
       <workItem from="1539880417852" duration="20000" />
-      <workItem from="1540349294977" duration="3445000" />
+      <workItem from="1540349294977" duration="3731000" />
     </task>
     <task id="LOCAL-00001" summary="i think i fix it">
       <created>1490605546316</created>
@@ -394,13 +396,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="28306000" />
+    <option name="totallyTimeSpent" value="28592000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24320458" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24320458" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Nl-Palette" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -410,8 +412,8 @@
       <window_info id="Capture Tool" order="7" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32827735" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.23614457" />
-      <window_info anchor="bottom" id="Debug" order="3" visible="true" weight="0.3987952" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.23614457" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.3987952" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -476,18 +478,6 @@
     <MESSAGE value="i think i fix it" />
     <option name="LAST_COMMIT_MESSAGE" value="i think i fix it" />
   </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/RPN.java</url>
-          <line>22</line>
-          <properties />
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
-  </component>
   <component name="antWorkspaceConfiguration">
     <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
     <option name="FILTER_TARGETS" value="false" />
@@ -538,7 +528,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/RPN.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="150">
+        <state relative-caret-position="924">
           <caret line="62" column="26" selection-start-line="62" selection-start-column="26" selection-end-line="62" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -548,11 +538,13 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/Calculator.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-894">
-          <caret line="40" column="36" selection-start-line="40" selection-start-column="36" selection-end-line="40" selection-end-column="36" />
+        <state relative-caret-position="317">
+          <caret line="139" column="38" selection-start-line="139" selection-start-column="38" selection-end-line="139" selection-end-column="38" />
           <folding>
             <element signature="n#!!doc" expanded="true" />
             <element signature="imports" expanded="true" />
+            <element signature="e#2661#2662#0" expanded="true" />
+            <element signature="e#2716#2717#0" expanded="true" />
           </folding>
         </state>
       </provider>
