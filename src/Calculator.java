@@ -100,7 +100,10 @@ public class Calculator implements ActionListener {
             }
         }
         else if (actionCommand.equals("(")) {
-            if (getLastChar() == null || getLastChar() == '+' || getLastChar() == '-' || getLastChar() == '/' || getLastChar() == '*') {
+            if (screenLabel.getText().equals("0") || screenLabel.getText().equals("0.0")) {
+                screenLabel.setText("(");
+            }
+            else if (getLastChar() == null || getLastChar() == '+' || getLastChar() == '-' || getLastChar() == '/' || getLastChar() == '*') {
                 screenLabel.setText(screenLabel.getText() + actionCommand);
             }
         }
