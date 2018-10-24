@@ -62,7 +62,13 @@ public class RPN {
     //из "3+4*2/ (1-5)" должно получиться "3 + 4 * 2 / ( 1 - 5 )"
     private static String addSpaces(String s) {
         s = s.replaceAll(" ", "");
+        s = s.replaceAll("(?<=[0-9)])([+\\-*/])(?=[0-9(])"," $1 ");
+        s = s.replaceAll("(\\()","$1 ");
+        s = s.replaceAll("(\\))"," $1");
+        return s;
+        /*
         StringBuilder t = new StringBuilder(s);
+
         for (int i = t.length() - 2; i >= 0; i--) {
             if (!Character.isDigit(t.charAt(i)) || !Character.isDigit(t.charAt(i + 1))) {
                 t.insert(i + 1, ' ');
@@ -74,22 +80,16 @@ public class RPN {
             t.deleteCharAt(1);
         }
         return t.toString();
+        */
     }
 
     private static boolean isNumber(String s) {
-        int i = 0;
-        if (s.equals("-")) {
+        try {
+            Double.parseDouble(s);
+            return true;
+        } catch (Exception e){
             return false;
         }
-        if (s.startsWith("-")) {
-            i = 1;
-        }
-        for (;i < s.length(); i++) {
-            if (!Character.isDigit(s.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
     }
 
     //Передается обычное выражение, например:
